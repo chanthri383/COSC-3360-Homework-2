@@ -2,17 +2,14 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <vector>
 
 using namespace std;
 
-void error(char *msg)
-{
-  perror(msg);
-  exit(0);
-}
 
-int main()
+int main(int argc, char *argv[])
 {
+  int sockID;
   
   
   
