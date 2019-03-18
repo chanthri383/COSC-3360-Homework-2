@@ -7,6 +7,12 @@ using namespace std;
 
 int main()
 {
+  int processSending = 0;
+  int passedValue = 0;
+  while(cin >> processSending >> passedValue)
+  {
+    //
+  }
   int createSocket = 0;
   int n = 0;
   char dataReceived[1024];
