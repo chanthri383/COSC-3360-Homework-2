@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <vector>
 
 
 using namespace std;
@@ -9,9 +10,12 @@ int main()
 {
   int processSending = 0;
   int passedValue = 0;
+  vector<int> sending;
+  vector<int> passValue;
   while(cin >> processSending >> passedValue)
   {
-    //
+    sending.push_back(processSending);
+    passValue.push_back(passedValue);
   }
   int createSocket = 0;
   int n = 0;
