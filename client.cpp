@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
     vector<int> sending;
     vector<int> passValue;
     while(cin >> processSending >> passedValue)
+    {
+        sending.push_back(processSending - 48);
+        passValue.push_back(passedValue - 48);
+    }
     int sockfd, portno, n;
 
     struct sockaddr_in serv_addr;
