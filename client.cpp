@@ -14,8 +14,8 @@ int main()
   vector<int> passValue;
   while(cin >> processSending >> passedValue)
   {
-    sending.push_back(processSending);
-    passValue.push_back(passedValue);
+    sending.push_back(processSending - 48);
+    passValue.push_back(passedValue - 48);
   }
   int createSocket = 0;
   int n = 0;
