@@ -1,37 +1,45 @@
-#include <iostream>
-#include <sys/types.h>
+#include <stdio.h>
+#include <sys/types.h> 
 #include <sys/socket.h>
-#include <unistd.h>
-#include <vector>
+#include <netinet/in.h>
 
-using namespace std;
-
-
-int main()
+void error(char *msg)
 {
-  char dataSending[1025]; 
-	int clientListn = 0; 
-  int clientConnt = 0;
-	struct sockaddr_in ipOfServer;
-	clientListn = socket(AF_INET, SOCK_STREAM, 0); // creating socket
-	memset(&ipOfServer, '0', sizeof(ipOfServer));
-	memset(dataSending, '0', sizeof(dataSending));
-	ipOfServer.sin_family = AF_INET;
-	ipOfServer.sin_addr.s_addr = htonl(INADDR_ANY);
-	ipOfServer.sin_port = htons(2017); 		// this is the port number of running server
-	bind(clientListn, (struct sockaddr*)&ipOfServer , sizeof(ipOfServer));
-	listen(clientListn , 20);
- 
-	while(1)
-	{
-		cout <<"Hi,Iam running server.Some Client hit me\n"; // whenever a request from client came. It will be processed here.
-		clientConnt = accept(clientListn, (struct sockaddr*)NULL, NULL);
- 
-		write(clintConnt, dataSending, strlen(dataSending));
- 
-        close(clientConnt);
-        sleep(1);
+    perror(msg);
+    exit(1);
+}
+
+int main(int argc, char *argv[])
+{
+     int sockfd, newsockfd, portno, clilen;
+     char buffer[256];
+     struct sockaddr_in serv_addr, cli_addr;
+     int n;
+     if (argc < 2) {
+         fprintf(stderr,"ERROR, no port provided\n");
+         exit(1);
      }
- 
-     return 0;
+     sockfd = socket(AF_INET, SOCK_STREAM, 0);
+     if (sockfd < 0) 
+        error("ERROR opening socket");
+     bzero((char *) &serv_addr, sizeof(serv_addr));
+     portno = atoi(argv[1]);
+     serv_addr.sin_family = AF_INET;
+     serv_addr.sin_addr.s_addr = INADDR_ANY;
+     serv_addr.sin_port = htons(portno);
+     if (bind(sockfd, (struct sockaddr *) &serv_addr,
+              sizeof(serv_addr)) < 0) 
+              error("ERROR on binding");
+     listen(sockfd,5);
+     clilen = sizeof(cli_addr);
+     newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
+     if (newsockfd < 0) 
+          error("ERROR on accept");
+     bzero(buffer,256);
+     n = read(newsockfd,buffer,255);
+     if (n < 0) error("ERROR reading from socket");
+     printf("Here is the message: %s\n",buffer);
+     n = write(newsockfd,"I got your message",18);
+     if (n < 0) error("ERROR writing to socket");
+     return 0; 
 }
