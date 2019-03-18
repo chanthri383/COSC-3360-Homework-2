@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
           error((char *)"ERROR on binding");
      }
      listen(sockfd,5);
-     clilen = sizeof(cli_addr);
+     clientLength = sizeof(cli_addr);
      newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr,(socklen_t*) &clientLength);
      if (newsockfd < 0) 
      {
