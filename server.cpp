@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-  char dataSending[1025]; // Actually this is called packet in Network Communication, which contain data and send through.
+  char dataSending[1025]; 
 	int clientListn = 0; 
   int clientConnt = 0;
 	struct sockaddr_in ipOfServer;
