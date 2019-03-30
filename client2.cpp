@@ -76,8 +76,7 @@ int main(int argc, char* argv[])
 	}
 	for(int i = 0; i < 3; i++)
 	{
-		serverAddress.sin_port = htons(port);
-		sleep(1);	
+		serverAddress.sin_port = htons(port);	
 		pid_t pid; //fork section of the code
 			
 		if(pid == 0)
