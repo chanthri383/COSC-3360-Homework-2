@@ -15,7 +15,6 @@ using namespace std;
 struct ServerRequest
 {
 	int beginningProcess;
-	int middleProcess;
 	int endingProcess;
 	int valueToBinary;
 };
@@ -44,10 +43,10 @@ string encode(ServerRequest *req, ServerResponse &res)
 	int b3[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b1[i] = (req[0].valueToBinary >> i) & 1;
-		
+		b1[i] = (req[0].valueToBinary >> i) & 1;	
 	}
 	int em1[12];
+	
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -82,29 +81,12 @@ int main(int argc, char* argv[])
 	}
 
 	port = atoi(argv[1]);
-	port1 = port + 1;
-	port2 = port + 2;
-	port3 = port + 3;
 
 	bzero((char *)&serverAddress, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_addr.s_addr = INADDR_ANY;
 	serverAddress.sin_port = htons(port1);
 
-	bzero((char *)&serverAddress, sizeof(serverAddress));
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_addr.s_addr = INADDR_ANY;
-	serverAddress.sin_port = htons(port2);
-
-	bzero((char *)&serverAddress, sizeof(serverAddress));
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_addr.s_addr = INADDR_ANY;
-	serverAddress.sin_port = htons(port3);
-
-
-	//not sure if need to call socket twice one in if statement above ports
-	//and other under this line of comment
-	//serverFD = socket(AF_INET, SOCK_STREAM, 0);
 	if (bind(serverFD, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0)
 	{
 		throw runtime_error("Unable to bind the address to the file descriptor");
