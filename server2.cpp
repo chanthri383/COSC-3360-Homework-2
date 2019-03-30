@@ -21,8 +21,8 @@ struct ServerRequest
 
 struct ServerResponse
 {
-	char beginningProcess;
-	char endingProcess;
+	int beginningProcess;
+	int endingProcess;
 	int EM[12];
 };
 
@@ -134,27 +134,32 @@ int main(int argc, char* argv[])
 		    throw runtime_error("Error accepting client 3 to the server");	    
 	    }
 
-	read(clientFD1, &(request[0].beginningProcess), sizeof(request[0].beginningProcess));
-	read(clientFD1, &(request[0].endingProcess), sizeof(request[0].endingProcess));
-	read(clientFD1, &(request[0].valueToBinary), sizeof(request[0].valueToBinary));
+	read(clientFD1, &request[0].beginningProcess, sizeof(request[0].beginningProcess));
+	read(clientFD1, &request[0].endingProcess, sizeof(request[0].endingProcess));
+	read(clientFD1, &request[0].valueToBinary, sizeof(request[0].valueToBinary));
 	
-	read(clientFD2, &(request[1].beginningProcess), sizeof(request[1].beginningProcess));
-	read(clientFD2, &(request[1].endingProcess), sizeof(request[1].endingProcess));
-	read(clientFD2, &(request[1].valueToBinary), sizeof(request[1].valueToBinary));
+	read(clientFD2, &request[1].beginningProcess, sizeof(request[1].beginningProcess));
+	read(clientFD2, &request[1].endingProcess, sizeof(request[1].endingProcess));
+	read(clientFD2, &request[1].valueToBinary, sizeof(request[1].valueToBinary));
 	
-	read(clientFD1, &(request[1].beginningProcess), sizeof(request[2].beginningProcess));
-	read(clientFD1, &(request[1].endingProcess), sizeof(request[2].endingProcess));
-	read(clientFD1, &(request[1].valueToBinary), sizeof(request[2].valueToBinary));
+	read(clientFD1, &request[2].beginningProcess), sizeof(request[2].beginningProcess));
+	read(clientFD1, &request[2].endingProcess), sizeof(request[2].endingProcess));
+	read(clientFD1, &request[2].valueToBinary), sizeof(request[2].valueToBinary));
 	
-	write(clientFD1, &response, sizeof(ServerResponse));
+	encode(request.beginningProcess, request.value);
+	
+	//create if statement to determine which walsh code to send using if statements
+	write(clientFD1, &response.EM, sizeof(response.EM));
+	write(clientFD1, &w1, sizeof(w1));
 	sleep(1);
 
 	response.beginningProcess = request[1].beginningProcess;
-	write(clientFD2, &response, sizeof(ServerResponse));
+	write(clientFD2, &response.EM, sizeof(response.EM));
+	write(clientFD2, & w2, sizeof(w2));
 	sleep(1);
 
-	response.beginningProcess = request[2].beginningProcess;
-	write(clientFD3, &response, sizeof(ServerResponse));
+	write(clientFD3, &response.EM, sizeof(response.EM));
+	write(clientFD3, &w3, sizeof(w3));
 	sleep(1);
 
 	close(clientFD1);
