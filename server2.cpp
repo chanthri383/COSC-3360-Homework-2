@@ -134,13 +134,18 @@ int main(int argc, char* argv[])
 		    throw runtime_error("Error accepting client 3 to the server");	    
 	    }
 
-	read(clientFD1, &(request[0]), sizeof(ServerRequest));
-
-	read(clientFD2, &(request[1]), sizeof(ServerRequest));
-
-	read(clientFD3, &(request[2]), sizeof(ServerRequest));
+	read(clientFD1, &(request[0].beginningProcess), sizeof(request[0].beginningProcess));
+	read(clientFD1, &(request[0].endingProcess), sizeof(request[0].endingProcess));
+	read(clientFD1, &(request[0].valueToBinary), sizeof(request[0].valueToBinary));
 	
-	response.beginningProcess = request[0].beginningProcess;
+	read(clientFD2, &(request[1].beginningProcess), sizeof(request[1].beginningProcess));
+	read(clientFD2, &(request[1].endingProcess), sizeof(request[1].endingProcess));
+	read(clientFD2, &(request[1].valueToBinary), sizeof(request[1].valueToBinary));
+	
+	read(clientFD1, &(request[1].beginningProcess), sizeof(request[2].beginningProcess));
+	read(clientFD1, &(request[1].endingProcess), sizeof(request[2].endingProcess));
+	read(clientFD1, &(request[1].valueToBinary), sizeof(request[2].valueToBinary));
+	
 	write(clientFD1, &response, sizeof(ServerResponse));
 	sleep(1);
 
