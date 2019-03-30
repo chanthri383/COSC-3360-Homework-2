@@ -132,9 +132,14 @@ int main(int argc, char* argv[])
 	    }
 
 	read(clientFD1, &(request[0]), sizeof(ServerRequest));
+	cout << "Client 1 received: " << endl;
+	
 	read(clientFD2, &(request[1]), sizeof(ServerRequest));
+	cout << "Client 2 received: " << endl;
+	
 	read(clientFD3, &(request[2]), sizeof(ServerRequest));
-
+	cout << "Client 3 received: " << endl;
+	
 	response.beginningProcess = request[0].beginningProcess;
 	write(clientFD1, &response, sizeof(ServerResponse));
 	sleep(1);
