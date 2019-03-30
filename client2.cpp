@@ -93,15 +93,15 @@ int main(int argc, char* argv[])
 			{
 				throw runtime_error("Could not establish a connection");
 			}
-				write(serverFD, &request.beginningProcess, sizeof(ServerRequest));
+				write(serverFD, &request.beginningProcess, sizeof(request.beginningProcess));
 			    	sleep(1);
-			    	write(serverFD, &request.endingProcess, sizeof(ServerRequest));
+			    	write(serverFD, &request.endingProcess, sizeof(request.endingProcess));
 			    	sleep(1);
-			    	write(serverFD, &request.valueToBinary, sizeof(ServerRequest));
+			    	write(serverFD, &request.valueToBinary, sizeof(request.valueToBinary));
 			    	sleep(1);
-			    	read(serverFD, &response.beginningProcess, sizeof(ServerResponse));
-			    	read(serverFD, &response.endingProcess, sizeof(ServerResponse));
-			    	read(serverFD, &response.EM, sizeof(ServerResponse));
+			    	read(serverFD, &response.beginningProcess, sizeof(response.beginningProcess));
+			    	read(serverFD, &response.endingProcess, sizeof(response.endingProcess));
+			    	read(serverFD, &response.EM, sizeof(response.EM));
 			    	
 				break;
 		}
