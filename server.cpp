@@ -52,6 +52,31 @@ void encode(ServerRequest *req, ServerResponse &res)
 		b2[i] = (req[1].valueToBinary >> i) & 1;
 	}
 	int em2[12];
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			em2[4 * i + j] = b1[i] * w2[j];
+		}
+	}
+
+	int b3[3];
+	for (int i = 0; i < 3; i++)
+	{
+		b3[i] = (req[2].valueToBinary >> i) & 1;
+	}
+	int em3[12];
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			em3[4 * i + j] = b3[i] * w3[j];
+		}
+	}
+	for (int i = 0; i < 12; i++)
+	{
+		res.EM[i] = em1[i] + em2[i] + em3[i];
+	}
 }
 int main(int argc, char* argv[])
 {
