@@ -15,10 +15,9 @@ using namespace std;
 
 struct ServerRequest
 {
-	int beginningProcess;
-	int middleProcess;
-	int endingProcess;
-	int valueToBinary;
+	char beginningProcess;
+	char endingProcess;
+	char valueToBinary;
 };
 struct ServerResponse
 {
@@ -93,7 +92,6 @@ int main(int argc, char* argv[])
 		throw runtime_error("Cannot get host name");
 	}
 	
-	
 	port = atoi(argv[2]); 
 	bzero((char *)&serverAddress, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
@@ -102,15 +100,16 @@ int main(int argc, char* argv[])
 		serverInfo->h_length);
 	while (cin >> request.endingProcess >> request.valueToEncode)
 	{	
+		serverAddress.sin_port = htons(port + processNumber);
 
 		cout << "Child, " <<  << " sending value: " << valueToSend <<
 			" " << "to child process " << destination << "." << endl;
 			
+		processNumber++;
 	}
 	//serverAddress.sin_port = htons(port + processNumber);
 	for(int i = 0; i < 3; i++)
 	{
-		serverAddress.sin_port = htons(port + processNumber);
 		sleep(1);	
 		pid_t pid; //fork section of the code
 			
@@ -126,12 +125,13 @@ int main(int argc, char* argv[])
 			{
 				throw runtime_error("Could not establish a connection");
 			}
-			
-			
+			if(i == 0)
+			{
+				write(serverFD, &request, sizeof(ServerRequest));
+			}
 			
 			break;
 		}
-			    processNumber++;
 	}
 	
 	close(serverFD);
