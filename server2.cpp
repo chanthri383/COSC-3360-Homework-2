@@ -151,17 +151,51 @@ int main(int argc, char* argv[])
 	write(clientFD1, &response.EM, sizeof(response.EM);
 	if(request[0].beginningProcess == 1)
 	{
-		write(clientFD, &w1, sizeof(w1);
+		write(clientFD1, &w1, sizeof(w1);
 	}
+	else if(request[0].beginningProcess == 2)
+	{
+		write(clientFD1, &w2, sizeof(w2);		      
+	}
+	else if(request[0].beginningProcess == 3)
+	{
+		write(clientFD1, &w3, sizeof(w3);
+	} 
+		      
 	sleep(1);
 
-	response.beginningProcess = request[1].beginningProcess;
-	write(clientFD2, &response.EM, sizeof(response.EM));
-	write(clientFD2, & w2, sizeof(w2));
+	write(clientFD2, &response.EM, sizeof(response.EM);
+	      
+	if(request[1].beginningProcess == 1)
+	{
+		write(clientFD1, &w1, sizeof(w1);
+	}
+	else if(request[1].beginningProcess == 2)
+	{
+		write(clientFD1, &w2, sizeof(w2);		      
+	}
+	else if(request[1].beginningProcess == 3)
+	{
+		write(clientFD1, &w3, sizeof(w3);
+	} 
+		      
 	sleep(1);
 
-	write(clientFD3, &response.EM, sizeof(response.EM));
-	write(clientFD3, &w3, sizeof(w3));
+	write(clientFD3, &response.EM, sizeof(response.EM);
+	      
+	if(request[2].beginningProcess == 1)
+	{
+		write(clientFD1, &w1, sizeof(w1);
+	}
+	else if(request[2].beginningProcess == 2)
+	{
+		write(clientFD1, &w2, sizeof(w2);		      
+	}
+	else if(request[2].beginningProcess == 3)
+	{
+		write(clientFD1, &w3, sizeof(w3);
+	} 
+		      
 	sleep(1);
 
 	close(clientFD1);
