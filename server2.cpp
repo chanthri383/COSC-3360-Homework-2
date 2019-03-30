@@ -148,9 +148,11 @@ int main(int argc, char* argv[])
 	
 	encode(request.beginningProcess, request.value);
 	
-	//create if statement to determine which walsh code to send using if statements
-	write(clientFD1, &response.EM, sizeof(response.EM));
-	write(clientFD1, &w1, sizeof(w1));
+	write(clientFD1, &response.EM, sizeof(response.EM);
+	if(request[0].beginningProcess == 1)
+	{
+		write(clientFD, &w1, sizeof(w1);
+	}
 	sleep(1);
 
 	response.beginningProcess = request[1].beginningProcess;
