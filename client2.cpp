@@ -102,16 +102,15 @@ int main(int argc, char* argv[])
 		serverInfo->h_length);
 	while (cin >> request.endingProcess >> request.valueToEncode)
 	{	
-		serverAddress.sin_port = htons(port + processNumber);
 
 		cout << "Child, " <<  << " sending value: " << valueToSend <<
 			" " << "to child process " << destination << "." << endl;
 			
-		processNumber++;
 	}
 	//serverAddress.sin_port = htons(port + processNumber);
 	for(int i = 0; i < 3; i++)
 	{
+		serverAddress.sin_port = htons(port + processNumber);
 		sleep(1);	
 		pid_t pid; //fork section of the code
 			
@@ -132,6 +131,7 @@ int main(int argc, char* argv[])
 			
 			break;
 		}
+			    processNumber++;
 	}
 	
 	close(serverFD);
