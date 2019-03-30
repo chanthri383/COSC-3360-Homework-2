@@ -15,18 +15,18 @@ using namespace std;
 
 struct ServerRequest
 {
-	char process;
 	char beginningProcess;
-	char middleProcess;
 	char endingProcess;
-	char valueToBinary;
+	int valueToBinary;
 };
+
 struct ServerResponse
 {
 	char beginningProcess;
 	char endingProcess;
 	int EM[12];
 };
+
 int decodeMessage(ServerResponse &respond) 
 {
 	vector<int> dm(12);
@@ -39,7 +39,6 @@ int decodeMessage(ServerResponse &respond)
 	{
 		dm[i] = w1[i % 4] * respond.EM[i];
 	}
-
 }
 
 int main(int argc, char* argv[])
@@ -73,12 +72,11 @@ int main(int argc, char* argv[])
 	{
 		cout << "Child, " <<  << " sending value: " << valueToSend <<
 			" " << "to child process " << destination << "." << endl;
-			
-		processNumber++;
+
 	}
 	for(int i = 0; i < 3; i++)
 	{
-		serverAddress.sin_port = htons(port + processNumber);
+		serverAddress.sin_port = htons(port);
 		sleep(1);	
 		pid_t pid; //fork section of the code
 			
@@ -95,12 +93,18 @@ int main(int argc, char* argv[])
 			{
 				throw runtime_error("Could not establish a connection");
 			}
-				write(serverFD, &request, sizeof(ServerRequest));
+				write(serverFD, &request.beginningProcess, sizeof(ServerRequest));
 			    	sleep(1);
+			    	write(serverFD, &request.endingProcess, sizeof(ServerRequest));
+			    	sleep(1);
+			    	write(serverFD, &request.valueToBinary, sizeof(ServerRequest));
+			    	sleep(1);
+			    	read(serverFD, &response.beginningProcess, sizeof(ServerResponse));
+			    	read(serverFD, &response.endingProcess, sizeof(ServerResponse));
+			    	read(serverFD, &response.EM, sizeof(ServerResponse));
 			    	
-			break;
+				break;
 		}
-		processNumber++; 
 	}
 	
 	close(serverFD);
