@@ -26,27 +26,17 @@ struct ServerResponse
 	int EM[12];
 };
 
-string encode(ServerRequest *req, ServerResponse &res)
+void encode(ServerRequest *req, ServerResponse &res)
 {
-	int binary1 = 0;
-	int binary2 = 0;
-	int binary3 = 0;
-	binary1 = req[0].valueToBinary - 48;
-	binary2 = req[1].valueToBinary - 48;
-	binary3 = req[2].valueToBinary - 48;
-
 	const vector<int> w1{ -1, 1, -1, 1 };
 	const vector<int> w2{ -1, -1, 1, 1 };
 	const vector<int> w3{ -1, 1, 1, -1 };
 	int b1[3];
-	int b2[3];
-	int b3[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b1[i] = (req[0].valueToBinary >> i) & 1;	
+		b1[i] = (req[0].valueToBinary >> i) & 1;
 	}
 	int em1[12];
-	
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -55,11 +45,37 @@ string encode(ServerRequest *req, ServerResponse &res)
 		}
 	}
 
+	int b2[3];
 	for (int i = 0; i < 3; i++)
 	{
 		b2[i] = (req[1].valueToBinary >> i) & 1;
 	}
 	int em2[12];
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			em2[4 * i + j] = b1[i] * w2[j];
+		}
+	}
+
+	int b3[3];
+	for (int i = 0; i < 3; i++)
+	{
+		b3[i] = (req[2].valueToBinary >> i) & 1;
+	}
+	int em3[12];
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			em3[4 * i + j] = b3[i] * w3[j];
+		}
+	}
+	for (int i = 0; i < 12; i++)
+	{
+		res.EM[i] = em1[i] + em2[i] + em3[i];
+	}
 }
 int main(int argc, char* argv[])
 {
