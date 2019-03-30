@@ -26,7 +26,7 @@ struct ServerResponse
 	int EM[12];
 };
 
-void encode(ServerRequest *req, ServerResponse &res)
+void encode(ServerRequest &request.beginningProcess, ServerRequest &valueToBinary)
 {
 	const vector<int> w1{ -1, 1, -1, 1 };
 	const vector<int> w2{ -1, -1, 1, 1 };
