@@ -67,6 +67,7 @@ int main(int argc, char* argv[])
 	memset(hostName, 0, 100);
 	int port;
 	int serverFD;
+	int port1, port2, port3;
 	struct sockaddr_in serverAddress;
 	struct sockaddr_in clientAddress1, clientAddress2, clientAddress3;
 
@@ -76,7 +77,6 @@ int main(int argc, char* argv[])
 	}
 
 	port = atoi(argv[1]);
-	int port1, port2, port3;
 	port1 = port + 1;
 	port2 = port + 2;
 	port3 = port + 3;
@@ -105,7 +105,10 @@ int main(int argc, char* argv[])
 		throw runtime_error("Unable to bind the address to the file descriptor");
 	}
 
-	listen(serverFD, 3); 
+	if(listen(serverFD, 3) < 0)
+	{
+		throw runtime_error("Listening failed");
+	}
 
 	cout << "Listening for clients..." << endl;
 
@@ -114,26 +117,33 @@ int main(int argc, char* argv[])
 	int clientAddressLength2 = sizeof(clientAddress2);
 	int clientAddressLength3 = sizeof(clientAddress3);
 	
-	clientFD1 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2);
-	clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2);
-	clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3);
+	if (clientFD1 = accept(serverFD, (sockaddr *)&clientAddress1, (socklen_t *)&clientAddressLength1 < 0)))
+	    {
+		    throw runtime_error("Error accepting client 1 to the server"); 
+	    }
+		
+	if (clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2 < 0)))
+	    {
+		    throw runtime_error("Error accepting client 2 to the server");	    
+	    }
+	if (clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3 < 0)))
+	    {
+		    throw runtime_error("Error accepting client 3 to the server");	    
+	    }
 
 	read(clientFD1, &(request[0]), sizeof(ServerRequest));
 	read(clientFD2, &(request[1]), sizeof(ServerRequest));
 	read(clientFD3, &(request[2]), sizeof(ServerRequest));
 
 	response.beginningProcess = request[0].beginningProcess;
-	response.endingProcess = request[0].endingProcess;
 	write(clientFD1, &response, sizeof(ServerResponse));
 	sleep(1);
 
 	response.beginningProcess = request[1].beginningProcess;
-	response.endingProcess = request[1].endingProcess;
 	write(clientFD2, &response, sizeof(ServerResponse));
 	sleep(1);
 
 	response.beginningProcess = request[2].beginningProcess;
-	response.endingProcess = request[2].endingProcess;
 	write(clientFD3, &response, sizeof(ServerResponse));
 	sleep(1);
 
