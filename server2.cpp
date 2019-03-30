@@ -27,18 +27,24 @@ struct ServerResponse
 	int EM[12];
 };
 
-string encode(ServerRequest *req, ServerResponse &res,int index)
+string encode(ServerRequest *req, ServerResponse &res)
 {
-	int number = 0;
-	number = req[index].valueToBinary - 48;
-	int clientFD1, clientFD2, clientFD3;
+	int binary1 = 0;
+	int binary2 = 0;
+	int binary3 = 0;
+	binary1 = req[0].valueToBinary - 48;
+	binary2 = req[1].valueToBinary - 48;
+	binary3 = req[2].valueToBinary - 48;
+
 	const vector<int> w1{ -1, 1, -1, 1 };
 	const vector<int> w2{ -1, -1, 1, 1 };
 	const vector<int> w3{ -1, 1, 1, -1 };
 	int b1[3];
+	int b2[3];
+	int b3[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b1[i] = (req[0].valueToBinary >> i) & 1;33
+		b1[i] = (req[0].valueToBinary >> i) & 1;
 		
 	}
 	int em1[12];
@@ -50,7 +56,6 @@ string encode(ServerRequest *req, ServerResponse &res,int index)
 		}
 	}
 
-	int b2[3];
 	for (int i = 0; i < 3; i++)
 	{
 		b2[i] = (req[1].valueToBinary >> i) & 1;
