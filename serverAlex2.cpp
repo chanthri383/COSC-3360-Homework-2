@@ -1,3 +1,6 @@
+// compile: g++ -std=c++11 -g -o server server.cpp
+// Usage: ./executable_name port
+
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
@@ -13,15 +16,14 @@ using namespace std;
 
 struct ServerRequest
 {
-	char beginningProcess;
-	char endingProcess;
-	char valueToBinary;
+	int beginningProcess;
+	int endingProcess;
+	int valueToEncode;
 };
-
 struct ServerResponse
 {
-	char beginningProcess;
-	char endingProcess;
+	int beginningProcess;
+	int endingProcess;
 	int EM[12];
 };
 
@@ -33,7 +35,7 @@ void encode(ServerRequest *req, ServerResponse &res)
 	int b1[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b1[i] = (req[0].valueToBinary >> i) & 1;
+		b1[i] = (req[0].valueToEncode >> i) & 1;
 	}
 	int em1[12];
 	for (int i = 0; i < 3; i++)
@@ -47,7 +49,7 @@ void encode(ServerRequest *req, ServerResponse &res)
 	int b2[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b2[i] = (req[1].valueToBinary >> i) & 1;
+		b2[i] = (req[1].valueToEncode >> i) & 1;
 	}
 	int em2[12];
 	for (int i = 0; i < 3; i++)
@@ -61,7 +63,7 @@ void encode(ServerRequest *req, ServerResponse &res)
 	int b3[3];
 	for (int i = 0; i < 3; i++)
 	{
-		b3[i] = (req[2].valueToBinary >> i) & 1;
+		b3[i] = (req[2].valueToEncode >> i) & 1;
 	}
 	int em3[12];
 	for (int i = 0; i < 3; i++)
@@ -88,26 +90,21 @@ int main(int argc, char *argv[])
 	struct sockaddr_in serverAddress;
 	struct hostent *serverInfo;
 
+	bzero((char *)&serverAddress, sizeof(serverAddress));
+	serverAddress.sin_family = AF_INET;
+	serverAddress.sin_addr.s_addr = INADDR_ANY;
+	serverAddress.sin_port = htons(port); //only connecting to one port
+
 	if ((serverFD = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		throw runtime_error("Socket unavailable");
 	}
-
-	strncpy(hostName, argv[1], 100);
-	if ((serverInfo = gethostbyname(hostName)) == NULL)
+	if (bind(serverFD, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
 	{
-		throw runtime_error("Invalid host");
+		throw runtime_error("Unable to bind the address to the file descriptor");
 	}
 
-	port = atoi(argv[2]); //only connecting to one port
-
-	bzero((char *)&serverAddress, sizeof(serverAddress));
-	serverAddress.sin_family = AF_INET;
-	bcopy((char *)serverInfo->h_addr,
-		  (char *)&serverAddress.sin_addr.s_addr,
-		  serverInfo->h_length);
-
-	serverAddress.sin_port = htons(port); //only connecting to one port
+	port = atoi(argv[1]); //only connecting to one port
 
 	listen(serverFD, 3);
 
