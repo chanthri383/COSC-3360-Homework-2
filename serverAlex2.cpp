@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
 	memset(hostName, 0, 100);
 	int port;
 	int serverFD;
+	struct sockaddr_in serverAddress;
 	struct hostent *serverInfo;
 
 	if ((serverFD = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -117,22 +118,22 @@ int main(int argc, char *argv[])
 	int clientAddressLength1 = sizeof(clientAddress1);
 	int clientAddressLength2 = sizeof(clientAddress2);
 	int clientAddressLength3 = sizeof(clientAddress3);
-	if (clientFD1 = accept(serverFD, (sockaddr *)&clientAddress1, (socklen_t *)&clientAddressLength1 < 0))
+	if (clientFD1 = accept(serverFD, (sockaddr *)&clientAddress1, (socklen_t *)&clientAddressLength1) < 0)
 	{
 		throw runtime_error("Error accepting client 1 to the server");
 	}
-	if (clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2 < 0))
+	if (clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2) < 0)
 	{
 		throw runtime_error("Error accepting client 2 to the server");
 	}
-	if (clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3 < 0))
+	if (clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3) < 0)
 	{
 		throw runtime_error("Error accepting client 3 to the server");
 	}
 
-	read(clientFD1, request[0], sizeof(ServerRequest));
-	read(clientFD2, request[1], sizeof(ServerRequest));
-	read(clientFD3, request[2], sizeof(ServerRequest));
+	read(clientFD1, &request[0], sizeof(ServerRequest));
+	read(clientFD2, &request[1], sizeof(ServerRequest));
+	read(clientFD3, &request[2], sizeof(ServerRequest));
 	cout << "Received messages from clients." << endl;
 
 	encode(request, response);
@@ -140,17 +141,17 @@ int main(int argc, char *argv[])
 
 	response.beginningProcess = request[0].beginningProcess;
 	response.endingProcess = request[0].endingProcess;
-	write(clientFD1, response, sizeof(ServerResponse));
+	write(clientFD1, &response, sizeof(ServerResponse));
 	sleep(1); //sleeps for one second to ensure data transferred properly in between each process
 
 	response.beginningProcess = request[1].beginningProcess;
 	response.endingProcess = request[1].endingProcess;
-	write(clientFD2, response, sizeof(ServerResponse));
+	write(clientFD2, &response, sizeof(ServerResponse));
 	sleep(1);
 
 	response.beginningProcess = request[2].beginningProcess;
 	response.endingProcess = request[2].endingProcess;
-	write(clientFD3, response, sizeof(ServerResponse));
+	write(clientFD3, &response, sizeof(ServerResponse));
 	sleep(1);
 
 	cout << "Finished sending encoded messages to clients." << endl;
