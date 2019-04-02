@@ -52,18 +52,18 @@ void decodeMessage(ServerResponse &respond)
 		break;
 	}
 
-	cout << "Child " << respond.endingProcess << endl;
+	cout << "Child " << (int)respond.endingProcess << endl;
 	cout << "Signal: ";
 	for (int i = 0; i < 12; i++)
 	{
-		dm[i] = w1[i % 4] * respond.EM[i];
 		cout << (int)respond.EM[i] << " ";
+		dm[i] = w1[i % 4] * respond.EM[i];
 	}
 	cout << endl;
 	cout << "Code: ";
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		if (((dm[0 + 4 * i] + dm[1 + 4 * i] + dm[2 + 4 * i] + dm[3 + 4 * i]) / 4) == 1)
+		if (((dm[0 + 3 * i] + dm[1 + 3 * i] + dm[2 + 3 * i] + dm[3 + 3 * i]) / 4) == 1)
 		{
 			cout << 1 << " ";
 			answer += pow(2, 2 - i);
@@ -106,12 +106,15 @@ int main(int argc, char *argv[])
 
 	for (int i = 0; i < 3; i++)
 	{
-		cin >> request.endingProcess >> request.valueToEncode;
+		int j, k;
+		cin >> j >> k;
+		request.endingProcess = j;
+		request.valueToEncode = k;
 		request.beginningProcess = processNumber;
-		cout << "Child, " << (int)processNumber << " sending value: " << request.valueToEncode << " "
-			 << "to child process " << request.endingProcess << "." << endl;
+		cout << "Child, " << (int)processNumber << " sending value: " << (int)request.valueToEncode << " "
+			 << "to child process " << (int)request.endingProcess << "." << endl;
 
-		cout << (int)request.beginningProcess << " " << request.endingProcess << " " << request.valueToEncode << endl;
+		cout << (int)request.beginningProcess << " " << (int)request.endingProcess << " " << (int)request.valueToEncode << endl;
 		processNumber++; // child 1, 2 and 3 affected on cout when incrementing this value
 
 		if ( (pid = fork()) == 0 )

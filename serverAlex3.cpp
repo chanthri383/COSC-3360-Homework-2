@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
 
 	listen(serverFD, 3);
 	cout << "Listening for clients..." << endl;
+	cout.flush();
 
 	// need to accept 3 times before reading
 	int clientFD1, clientFD2, clientFD3;
@@ -115,24 +116,33 @@ int main(int argc, char *argv[])
 	int clientAddressLength1 = sizeof(clientAddress1);
 	int clientAddressLength2 = sizeof(clientAddress2);
 	int clientAddressLength3 = sizeof(clientAddress3);
-	if (clientFD1 = accept(serverFD, (sockaddr *)&clientAddress1, (socklen_t *)&clientAddressLength1) < 0)
+	clientFD1 = accept(serverFD, (sockaddr *)&clientAddress1, (socklen_t *)&clientAddressLength1);
+	clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2);
+	clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3);
+	if (clientFD1 < 0)
 	{
 		throw runtime_error("Error accepting client 1 to the server");
 	}
-	if (clientFD2 = accept(serverFD, (sockaddr *)&clientAddress2, (socklen_t *)&clientAddressLength2) < 0)
+	if (clientFD2 < 0)
 	{
 		throw runtime_error("Error accepting client 2 to the server");
 	}
-	if (clientFD3 = accept(serverFD, (sockaddr *)&clientAddress3, (socklen_t *)&clientAddressLength3) < 0)
+	if (clientFD3 < 0)
 	{
 		throw runtime_error("Error accepting client 3 to the server");
 	}
 	cout << "Connected to clients." << endl;
+	cout.flush();
 
 	read(clientFD1, &request[0], sizeof(ServerRequest));
 	read(clientFD2, &request[1], sizeof(ServerRequest));
 	read(clientFD3, &request[2], sizeof(ServerRequest));
 	cout << "Received messages from clients." << endl;
+	cout.flush();
+
+	cout << (int)request[0].beginningProcess << " "
+		 << (int)request[0].endingProcess << " "
+		 << (int)request[0].valueToEncode << endl;
 
 	encode(request, response);
 	cout << "Finished encoding the messages." << endl;
@@ -160,6 +170,7 @@ int main(int argc, char *argv[])
 	sleep(1);
 
 	cout << "Finished sending encoded messages to clients." << endl;
+	cout.flush();
 
 	close(clientFD1);
 	close(clientFD2);
