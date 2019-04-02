@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
 	int serverFD;
 	struct sockaddr_in serverAddress;
 	struct hostent *serverInfo;
+	port = atoi(argv[1]); //only connecting to one port
 
 	bzero((char *)&serverAddress, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
