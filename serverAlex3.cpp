@@ -32,44 +32,20 @@ void encode(ServerRequest *req, ServerResponse &res)
 	const vector<int> w1{-1, 1, -1, 1};
 	const vector<int> w2{-1, -1, 1, 1};
 	const vector<int> w3{-1, 1, 1, -1};
-	int b1[3];
+	int b1[3], b2[3], b3[3];
+	int em1[12], em2[12], em3[12];
 	for (int i = 0; i < 3; i++)
 	{
 		b1[i] = (req[0].valueToEncode >> i) & 1;
+		b2[i] = (req[1].valueToEncode >> i) & 1;
+		b3[i] = (req[2].valueToEncode >> i) & 1;
 	}
-	int em1[12];
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
 			em1[4 * i + j] = b1[i] * w1[j];
-		}
-	}
-
-	int b2[3];
-	for (int i = 0; i < 3; i++)
-	{
-		b2[i] = (req[1].valueToEncode >> i) & 1;
-	}
-	int em2[12];
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			em2[4 * i + j] = b1[i] * w2[j];
-		}
-	}
-
-	int b3[3];
-	for (int i = 0; i < 3; i++)
-	{
-		b3[i] = (req[2].valueToEncode >> i) & 1;
-	}
-	int em3[12];
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
+			em2[4 * i + j] = b2[i] * w2[j];
 			em3[4 * i + j] = b3[i] * w3[j];
 		}
 	}
@@ -143,9 +119,20 @@ int main(int argc, char *argv[])
 	cout << (int)request[0].beginningProcess << " "
 		 << (int)request[0].endingProcess << " "
 		 << (int)request[0].valueToEncode << endl;
+	cout << (int)request[1].beginningProcess << " "
+		 << (int)request[1].endingProcess << " "
+		 << (int)request[1].valueToEncode << endl;
+	cout << (int)request[2].beginningProcess << " "
+		 << (int)request[2].endingProcess << " "
+		 << (int)request[2].valueToEncode << endl;
 
 	encode(request, response);
 	cout << "Finished encoding the messages." << endl;
+	for (int i = 0; i < 12; i++)
+	{
+		cout << (int)response.EM[i] << " ";
+	}
+	cout << endl;
 
 	ServerResponse response1, response2, response3;
 	for (int i = 0; i < 12; i++) {

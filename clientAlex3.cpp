@@ -52,6 +52,7 @@ void decodeMessage(ServerResponse &respond)
 		break;
 	}
 
+	cout << endl;
 	cout << "Child " << (int)respond.endingProcess << endl;
 	cout << "Signal: ";
 	for (int i = 0; i < 12; i++)
