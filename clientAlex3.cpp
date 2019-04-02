@@ -18,15 +18,15 @@ using namespace std;
 
 struct ServerRequest
 {
-	int beginningProcess;
-	int endingProcess;
-	int valueToEncode;
+	char beginningProcess;
+	char endingProcess;
+	char valueToEncode;
 };
 struct ServerResponse
 {
-	int beginningProcess;
-	int endingProcess;
-	int EM[12];
+	char beginningProcess;
+	char endingProcess;
+	char EM[12];
 };
 void decodeMessage(ServerResponse &respond)
 {
@@ -57,7 +57,7 @@ void decodeMessage(ServerResponse &respond)
 	for (int i = 0; i < 12; i++)
 	{
 		dm[i] = w1[i % 4] * respond.EM[i];
-		cout << respond.EM[i] << " ";
+		cout << (int)respond.EM[i] << " ";
 	}
 	cout << endl;
 	cout << "Code: ";
@@ -101,17 +101,17 @@ int main(int argc, char *argv[])
 		  serverInfo->h_length);
 	serverAddress.sin_port = htons(port); //we do not have to create multiple ports just one
 
-	int processNumber = 1;
+	char processNumber = 1;
 	pid_t pid;
 
 	for (int i = 0; i < 3; i++)
 	{
 		cin >> request.endingProcess >> request.valueToEncode;
 		request.beginningProcess = processNumber;
-		cout << "Child, " << processNumber << " sending value: " << request.valueToEncode << " "
+		cout << "Child, " << (int)processNumber << " sending value: " << request.valueToEncode << " "
 			 << "to child process " << request.endingProcess << "." << endl;
 
-		cout << request.beginningProcess << " " << request.endingProcess << " " << request.valueToEncode << endl;
+		cout << (int)request.beginningProcess << " " << request.endingProcess << " " << request.valueToEncode << endl;
 		processNumber++; // child 1, 2 and 3 affected on cout when incrementing this value
 
 		if ( (pid = fork()) == 0 )
@@ -137,7 +137,6 @@ int main(int argc, char *argv[])
 
 	if (connect(serverFD, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
 	{
-		// this is thrown
 		throw runtime_error("Could not establish a connection");
 	}
 

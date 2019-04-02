@@ -16,15 +16,15 @@ using namespace std;
 
 struct ServerRequest
 {
-	int beginningProcess;
-	int endingProcess;
-	int valueToEncode;
+	char beginningProcess;
+	char endingProcess;
+	char valueToEncode;
 };
 struct ServerResponse
 {
-	int beginningProcess;
-	int endingProcess;
-	int EM[12];
+	char beginningProcess;
+	char endingProcess;
+	char EM[12];
 };
 
 void encode(ServerRequest *req, ServerResponse &res)
@@ -160,8 +160,6 @@ int main(int argc, char *argv[])
 	sleep(1);
 
 	cout << "Finished sending encoded messages to clients." << endl;
-
-	cout << sizeof(response) << " " << sizeof(ServerResponse) << endl;
 
 	close(clientFD1);
 	close(clientFD2);
