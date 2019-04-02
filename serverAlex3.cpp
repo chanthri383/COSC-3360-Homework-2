@@ -1,5 +1,5 @@
 // compile: g++ -std=c++11 -g -o server server.cpp
-// Usage: ./executable_name port
+// Usage: ./server port
 
 #include <iostream>
 #include <stdlib.h>
@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <cmath>
 
 using namespace std;
 
@@ -36,9 +37,9 @@ void encode(ServerRequest *req, ServerResponse &res)
 	int em1[12], em2[12], em3[12];
 	for (int i = 0; i < 3; i++)
 	{
-		b1[i] = (req[0].valueToEncode >> i) & 1;
-		b2[i] = (req[1].valueToEncode >> i) & 1;
-		b3[i] = (req[2].valueToEncode >> i) & 1;
+		b1[i] = (req[0].valueToEncode >> (2-i)) & 1;
+		b2[i] = (req[1].valueToEncode >> (2-i)) & 1;
+		b3[i] = (req[2].valueToEncode >> (2-i)) & 1;
 	}
 	for (int i = 0; i < 3; i++)
 	{
