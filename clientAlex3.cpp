@@ -1,5 +1,5 @@
 // compile: g++ -std=c++11 -g -o client client.cpp
-// Usage: ./executable_name hostname port < in.txt
+// Usage: ./client hostname port < in.txt
 
 #include <iostream>
 #include <stdlib.h>
@@ -58,13 +58,27 @@ void decodeMessage(ServerResponse &respond)
 	for (int i = 0; i < 12; i++)
 	{
 		cout << (int)respond.EM[i] << " ";
-		dm[i] = w1[i % 4] * respond.EM[i];
+		dm[i] = tempW[i % 4] * respond.EM[i];
 	}
 	cout << endl;
-	cout << "Code: ";
-	for (int i = 0; i < 4; i++)
+
+	// cout << "tempW: ";
+	// for (int i = 0; i < 4; i++)
+	// {
+	// 	cout << tempW[i] << " ";
+	// }
+	// cout << endl;
+	// cout << "DM: ";
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	cout << dm[i] << " ";
+	// }
+	// cout << endl;
+
+	cout << "Code: -1 ";
+	for (int i = 0; i < 3; i++)
 	{
-		if (((dm[0 + 3 * i] + dm[1 + 3 * i] + dm[2 + 3 * i] + dm[3 + 3 * i]) / 4) == 1)
+		if (((dm[0 + 4 * i] + dm[1 + 4 * i] + dm[2 + 4 * i] + dm[3 + 4 * i]) / 4) == 1)
 		{
 			cout << 1 << " ";
 			answer += pow(2, 2 - i);
@@ -112,7 +126,7 @@ int main(int argc, char *argv[])
 		request.endingProcess = j;
 		request.valueToEncode = k;
 		request.beginningProcess = processNumber;
-		cout << "Child, " << (int)processNumber << " sending value: " << (int)request.valueToEncode << " "
+		cout << "Child " << (int)processNumber << ", sending value: " << (int)request.valueToEncode << " "
 			 << "to child process " << (int)request.endingProcess << "." << endl;
 
 		cout << (int)request.beginningProcess << " " << (int)request.endingProcess << " " << (int)request.valueToEncode << endl;
